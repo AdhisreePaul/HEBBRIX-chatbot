@@ -1,97 +1,166 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../src/App.css";
 
 function App() {
-  const [chatInput, setChatInput] = useState("");
-  const [chatResponse, setChatResponse] = useState("");
-  const [memoriesUsed, setMemoriesUsed] = useState([]);
-  const [memoryInput, setMemoryInput] = useState("");
-  const [allMemories, setAllMemories] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [memories, setMemories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   const API_BASE = "http://127.0.0.1:8000/api";
 
-  // Fetch all memories
+  const storeMemory = async () => {
+    if (!input.trim()) return;
+  
+    await axios.post(`${API_BASE}/memories`, {
+      text: input,
+    });
+  
+    fetchMemories();
+    setInput("");
+  };
+  
   const fetchMemories = async () => {
     const res = await axios.get(`${API_BASE}/memories/all`);
-    setAllMemories(res.data);
+    setMemories(res.data);
   };
 
   useEffect(() => {
     fetchMemories();
   }, []);
 
-  // Store new memory
-  const handleStoreMemory = async () => {
-    if (!memoryInput) return;
+  useEffect(() => {
+    const chatBody = document.querySelector(".chat-body");
+    if (chatBody) {
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+  }, [messages, loading]);
 
-    await axios.post(`${API_BASE}/memories`, {
-      text: memoryInput
-    });
+  const sendMessage = async () => {
+    if (!input.trim()) return;
 
-    setMemoryInput("");
-    fetchMemories();
-  };
+    const timestamp = new Date().toLocaleTimeString();
 
-  // Send chat query
-  const handleChat = async () => {
-    if (!chatInput) return;
+    const userMessage = {
+      sender: "user",
+      text: input,
+      time: timestamp,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setLoading(true);
+
+    const history = [...messages, userMessage].map((msg) => ({
+      role: msg.sender === "user" ? "user" : "assistant",
+      content: msg.text,
+    }));
 
     const res = await axios.post(`${API_BASE}/chat`, {
-      query: chatInput
+      query: input,
+      history: history,
     });
 
-    setChatResponse(res.data.answer);
-    setMemoriesUsed(res.data.memories_used);
+    const aiMessage = {
+      sender: "ai",
+      text: res.data.answer,
+      memories_used: res.data.memories_used,
+      time: new Date().toLocaleTimeString(),
+    };
+
+    setLoading(false);
+    setMessages((prev) => [...prev, aiMessage]);
+    setInput("");
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>AI Memory Assistant</h1>
+    <div className={darkMode ? "page dark" : "page"}>
+      <div className="chat-wrapper">
 
-      <hr />
+        <div className="chat-container">
+          <div className="chat-header">
+            <span>AI Memory Assistant</span>
+            <button
+              className="theme-toggle"
+              onClick={() => setDarkMode(!darkMode)}
+            >
+              {darkMode ? "☀️" : "🌙"}
+            </button>
+          </div>
 
-      <h2>Store New Memory</h2>
-      <input
-        type="text"
-        value={memoryInput}
-        onChange={(e) => setMemoryInput(e.target.value)}
-        placeholder="Enter conversation text..."
-        style={{ width: "400px", marginRight: "10px" }}
-      />
-      <button onClick={handleStoreMemory}>Store</button>
+          <div className="chat-body">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`message-wrapper ${
+                  msg.sender === "user" ? "user-align" : "ai-align"
+                }`}
+              >
+                <div className="avatar">
+                  {msg.sender === "user" ? "👤" : "🤖"}
+                </div>
 
-      <hr />
+                <div
+                  className={`message ${
+                    msg.sender === "user" ? "user-message" : "ai-message"
+                  }`}
+                >
+                  <div className="message-text">{msg.text}</div>
+                  <div className="timestamp">{msg.time}</div>
 
-      <h2>Chat</h2>
-      <input
-        type="text"
-        value={chatInput}
-        onChange={(e) => setChatInput(e.target.value)}
-        placeholder="Ask something..."
-        style={{ width: "400px", marginRight: "10px" }}
-      />
-      <button onClick={handleChat}>Send</button>
+                  {msg.memories_used && (
+                    <div className="memory-info">
+                      <strong>Memories Used:</strong>
+                      <ul>
+                        {msg.memories_used.map((m, i) => (
+                          <li key={i}>{m.content || m}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
 
-      <div style={{ marginTop: "20px" }}>
-        <h3>AI Response:</h3>
-        <p>{chatResponse}</p>
+            {loading && (
+              <div className="message-wrapper ai-align">
+                <div className="avatar">🤖</div>
+                <div className="message ai-message typing">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
+          </div>
 
-        <h3>Memories Used:</h3>
-        <ul>
-          {memoriesUsed.map((m, index) => (
-            <li key={index}>{m}</li>
-          ))}
-        </ul>
+          <div className="chat-input">
+            <input
+              type="text"
+              placeholder="Ask something..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <button className="send-btn" onClick={sendMessage}>
+              Send
+            </button>
+            <button className="store-btn" onClick={storeMemory} title="Store as memory">
+              💾
+            </button>
+          </div>
+
+        </div>
+
+        <div className="memory-panel">
+          <h3>Stored Memories</h3>
+          <ul>
+            {memories.map((memory) => (
+              <li key={memory.id}>{memory.content}</li>
+            ))}
+          </ul>
+        </div>
       </div>
-
-      <hr />
-
-      <h2>All Stored Memories</h2>
-      <ul>
-        {allMemories.map((memory) => (
-          <li key={memory.id}>{memory.content}</li>
-        ))}
-      </ul>
     </div>
   );
 }

@@ -2,13 +2,10 @@ import os
 import json
 import django
 
-# 1️⃣ Tell Django where settings are
+# Setup Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-
-# 2️⃣ Setup Django
 django.setup()
 
-# 3️⃣ Now import models
 from memory_app.models import Memory
 from memory_app.services.embedding import cosine_similarity, get_embedding
 
@@ -39,7 +36,10 @@ def evaluate():
 
     correct_top1 = 0
     correct_top3 = 0
+    reciprocal_rank_sum = 0
     total = len(dataset)
+
+    print("\n===== EVALUATION START =====\n")
 
     for item in dataset:
         query_embedding = get_embedding(item["query"])
@@ -51,24 +51,40 @@ def evaluate():
             scored.append((score, memory.content))
 
         scored.sort(reverse=True, key=lambda x: x[0])
+
         top_results = [m for _, m in scored[:3]]
 
+        # --- Top-1 ---
         is_top1 = top_results[0] == item["expected_memory"]
+
+        # --- Top-3 ---
         is_top3 = item["expected_memory"] in top_results
+
+        # --- MRR ---
+        for rank, (_, content) in enumerate(scored):
+            if content == item["expected_memory"]:
+                reciprocal_rank_sum += 1 / (rank + 1)
+                break
 
         if is_top1:
             correct_top1 += 1
         if is_top3:
             correct_top3 += 1
 
-        print("\nQuery:", item["query"])
-        print("Expected:", item["expected_memory"])
-        print("Top 3:", top_results)
-        print("Top1 Correct:", is_top1)
+        print(f"Query: {item['query']}")
+        print(f"Expected: {item['expected_memory']}")
+        print(f"Top 3 Retrieved: {top_results}")
+        print(f"Top1 Correct: {is_top1}")
+        print("-" * 50)
 
-    print("\n========== RESULTS ==========")
-    print("Top-1 Accuracy:", correct_top1 / total)
-    print("Top-3 Hit Rate:", correct_top3 / total)
+    top1_accuracy = correct_top1 / total
+    top3_hit_rate = correct_top3 / total
+    mrr = reciprocal_rank_sum / total
+
+    print("\n===== FINAL RESULTS =====")
+    print(f"Top-1 Accuracy: {top1_accuracy:.2f}")
+    print(f"Top-3 Hit Rate: {top3_hit_rate:.2f}")
+    print(f"MRR: {mrr:.2f}")
 
 
 if __name__ == "__main__":

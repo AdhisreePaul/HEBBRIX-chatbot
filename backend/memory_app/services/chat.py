@@ -13,30 +13,51 @@ def retrieve_relevant_memories(query, top_k=3):
     scored = []
     for memory in memories:
         score = cosine_similarity(query_embedding, memory.embedding)
-        scored.append((score, memory.content))
+        scored.append({
+            "content": memory.content,
+            "score": float(score)
+        })
 
-    scored.sort(reverse=True, key=lambda x: x[0])
-    return [m for _, m in scored[:top_k]]
+    scored.sort(key=lambda x: x["score"], reverse=True)
+    return scored[:top_k]
 
 
-def generate_response(query):
+
+def generate_response(query, chat_history=None):
     relevant_memories = retrieve_relevant_memories(query)
 
-    prompt = f"""
-You are a helpful AI assistant.
+    formatted_memories = "\n".join(
+        [f"- {m['content']}" if isinstance(m, dict) else f"- {m}" 
+         for m in relevant_memories]
+    )
 
-Relevant user memories:
-{relevant_memories}
+    system_prompt = f"""
+    You are an AI assistant with long-term memory.
 
-User question:
-{query}
+    These are VERIFIED long-term facts about the user:
+    {formatted_memories}
 
-Answer in a personalized way using the memories if relevant.
-"""
+    IMPORTANT RULES:
+    - Treat the above facts as TRUE.
+    - Use them when answering.
+    - Do NOT say you lack information if relevant facts are provided.
+    - If the user asks follow-up questions like "Are you sure?",
+    continue the conversation naturally.
+    - Personalize the response using the stored facts when relevant.
+    """
+
+    messages = [{"role": "system", "content": system_prompt}]
+
+    # Add conversation history if exists
+    if chat_history:
+        messages.extend(chat_history)
+
+    messages.append({"role": "user", "content": query})
 
     response = client.chat.completions.create(
-        model="gpt-4.1-nano",
-        messages=[{"role": "user", "content": prompt}]
+        model="gpt-4o-mini",
+        messages=messages,
+        temperature=0.3
     )
 
     return response.choices[0].message.content, relevant_memories
