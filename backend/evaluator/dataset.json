@@ -1,0 +1,23 @@
+[
+    {
+      "memory": "User is allergic to peanuts.",
+      "query": "What foods should I avoid?",
+      "expected_memory": "User is allergic to peanuts."
+    },
+    {
+      "memory": "User loves Italian food.",
+      "query": "Suggest dinner for me.",
+      "expected_memory": "User loves Italian food."
+    },
+    {
+      "memory": "User works as a software engineer.",
+      "query": "What job do I have?",
+      "expected_memory": "User works as a software engineer."
+    },
+    {
+      "memory": "User lives in Mumbai.",
+      "query": "Where am I located?",
+      "expected_memory": "User lives in Mumbai."
+    }
+  ]
+  
