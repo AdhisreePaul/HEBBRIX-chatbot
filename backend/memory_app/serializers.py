@@ -4,4 +4,4 @@ from .models import Memory
 class MemorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Memory
-        fields = '__all__'
+        fields = ["id", "content", "importance_score", "created_at"]

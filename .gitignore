@@ -36,3 +36,10 @@ venv
 .env.development.local
 .env.test.local
 .env.production.local
+
+venv/
+.venv/
+__pycache__/
+*.pyc
+db.sqlite3
+.env
