@@ -27,8 +27,8 @@ class MemoryCreateAPIView(APIView):
 
         if not text:
             return Response(
-                {"error": "Text is required"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Feild 'text' is required"},
+                status=400
             )
 
         facts = extract_memories(text)
@@ -123,14 +123,13 @@ class MemoryDeleteAPIView(APIView):
         except Memory.DoesNotExist:
             return Response(
                 {"error": "Memory not found"},
-                status=status.HTTP_404_NOT_FOUND
+                status=404
             )
 
         memory.delete()
 
         return Response(
-            {"message": f"Memory {id} deleted successfully."},
-            status=status.HTTP_200_OK
+            {"message": f"Memory {id} deleted successfully."}
         )
 
 

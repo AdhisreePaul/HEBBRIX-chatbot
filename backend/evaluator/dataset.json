@@ -1,23 +1,52 @@
 [
-    {
-      "memory": "User is allergic to peanuts.",
-      "query": "What foods should I avoid?",
-      "expected_memory": "User is allergic to peanuts."
-    },
-    {
-      "memory": "User loves Italian food.",
-      "query": "Suggest dinner for me.",
-      "expected_memory": "User loves Italian food."
-    },
-    {
-      "memory": "User works as a software engineer.",
-      "query": "What job do I have?",
-      "expected_memory": "User works as a software engineer."
-    },
-    {
-      "memory": "User lives in Mumbai.",
-      "query": "Where am I located?",
-      "expected_memory": "User lives in Mumbai."
-    }
-  ]
-  
+  {
+    "memory": "User is allergic to peanuts.",
+    "query": "Are there any foods I should stay away from?",
+    "expected_memory": "User is allergic to peanuts."
+  },
+  {
+    "memory": "User loves Italian food.",
+    "query": "What cuisine would I probably enjoy for dinner?",
+    "expected_memory": "User loves Italian food."
+  },
+  {
+    "memory": "User works as a software engineer.",
+    "query": "What is my profession?",
+    "expected_memory": "User works as a software engineer."
+  },
+  {
+    "memory": "User lives in Mumbai.",
+    "query": "Which city am I based in?",
+    "expected_memory": "User lives in Mumbai."
+  },
+  {
+    "memory": "User has a thyroid condition.",
+    "query": "Do I have any medical condition I should consider?",
+    "expected_memory": "User has a thyroid condition."
+  },
+  {
+    "memory": "User prefers working at night.",
+    "query": "When am I usually most productive?",
+    "expected_memory": "User prefers working at night."
+  },
+  {
+    "memory": "User enjoys watching sci-fi movies.",
+    "query": "What kind of movies do I like?",
+    "expected_memory": "User enjoys watching sci-fi movies."
+  },
+  {
+    "memory": "User owns a Lenovo laptop.",
+    "query": "What brand of laptop do I use?",
+    "expected_memory": "User owns a Lenovo laptop."
+  },
+  {
+    "memory": "User exercises every morning.",
+    "query": "Do I have a daily fitness routine?",
+    "expected_memory": "User exercises every morning."
+  },
+  {
+    "memory": "User is planning to move to Bangalore next year.",
+    "query": "Am I relocating anywhere soon?",
+    "expected_memory": "User is planning to move to Bangalore next year."
+  }
+]

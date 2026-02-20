@@ -263,6 +263,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
+```
 
 ## Frontend
 
@@ -270,5 +271,10 @@ python manage.py runserver
 cd frontend
 npm install
 npm start
+```
 
+## Postman Collection
+
+A Postman collection is included (`hebbrix_postman_collection.json`)
+to test all API endpoints.
 
