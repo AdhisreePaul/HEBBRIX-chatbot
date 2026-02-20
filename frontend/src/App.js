@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import axios from "axios";
 import "../src/App.css";
 
@@ -106,7 +108,11 @@ function App() {
                     msg.sender === "user" ? "user-message" : "ai-message"
                   }`}
                 >
-                  <div className="message-text">{msg.text}</div>
+                  <div className="message-text">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {msg.text}
+                    </ReactMarkdown>
+                  </div>
                   <div className="timestamp">{msg.time}</div>
 
                   {msg.memories_used && (

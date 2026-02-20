@@ -112,11 +112,16 @@ body {
   .user-message {
     background: linear-gradient(135deg, #4f46e5, #6366f1);
     color: white;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   }
   
   .ai-message {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   }
   
   .dark .ai-message {
@@ -225,3 +230,58 @@ body {
     100% { opacity: 0.2; }
   }
   
+  .message-text h1,
+.message-text h2,
+.message-text h3 {
+  margin: 8px 0;
+  font-weight: 600;
+}
+
+.message-text ul {
+  padding-left: 18px;
+  margin: 6px 0;
+}
+
+.message-text li {
+  margin-bottom: 4px;
+}
+
+.message-text p {
+  margin: 6px 0;
+}
+
+.message-text strong {
+  font-weight: 600;
+}
+
+.message-text code {
+  background: rgba(0, 0, 0, 0.08);
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.dark .message-text code {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.message-text pre {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.dark .message-text pre {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.message-text a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.message-text a:hover {
+  text-decoration: underline;
+}

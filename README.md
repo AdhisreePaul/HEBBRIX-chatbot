@@ -4,20 +4,6 @@ A memory-augmented conversational AI assistant built for the Hebbrix AI/ML Inter
 
 This project demonstrates a complete **store → retrieve → use** memory loop with structured fact extraction, semantic retrieval using embeddings, evaluation metrics, and a REST API exposed through a modern React interface.
 
-The focus is not on UI — it is on system reasoning, retrieval quality, and architectural clarity.
-
----
-
-# 🎯 Problem Statement
-
-Most LLM-based assistants are stateless. They respond based only on the current prompt unless conversation history is manually passed.
-
-This project explores:
-
-> How can an AI assistant remember durable user facts across sessions and use them intelligently in future conversations?
-
-The system implements structured long-term memory storage, semantic similarity retrieval, ranking logic, and personalized response generation.
-
 ---
 
 # 🏗️ System Architecture
@@ -215,36 +201,6 @@ Strict Top-1 retrieval can be brittle under paraphrased queries.
 - Improves retrieval precision
 - Prevents noise injection
 - Mimics structured long-term memory abstraction
-
----
-
-# 🚀 Future Improvements
-
-If extended further:
-
-- Memory decay / recency weighting
-- Adaptive importance scoring via feedback
-- Hybrid search (BM25 + vector similarity)
-- Entity-aware filtering
-- Deduplication via similarity thresholding
-- Vector database integration
-- Memory pruning under capacity constraints
-
----
-
-# 🧩 Human Memory Analogy
-
-Humans:
-
-- Store abstractions, not raw transcripts
-- Prioritize important or repeated facts
-- Recall via semantic association
-
-This system mimics:
-
-- Durable fact abstraction
-- Similarity-based recall
-- Importance-weighted ranking
 
 ---
 
