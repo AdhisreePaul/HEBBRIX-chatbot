@@ -1,0 +1,6 @@
+========== MEMORY SYSTEM EVALUATION REPORT ==========
+
+Total Queries: 10
+Top-1 Accuracy: 0.8000
+Top-3 Hit Rate: 1.0000
+Mean Reciprocal Rank (MRR): 0.9000

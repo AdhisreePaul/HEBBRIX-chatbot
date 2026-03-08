@@ -7,7 +7,7 @@ from .models import Memory
 from .serializers import MemorySerializer
 from .services.embedding import get_embedding, cosine_similarity
 from .services.extractor import extract_memories
-from .services.retrieval import hybrid_rank_memories, keyword_overlap_score
+from .services.retrieval import hybrid_rank_memories
 from .services.chat import generate_response
 
 
@@ -82,6 +82,7 @@ class MemoryListAPIView(APIView):
         memories = Memory.objects.all().order_by("-created_at")
         serializer = MemorySerializer(memories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 class MemorySearchAPIView(APIView):
 

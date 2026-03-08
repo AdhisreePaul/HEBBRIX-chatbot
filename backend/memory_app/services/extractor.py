@@ -5,13 +5,13 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 def extract_memories(text):
     prompt = f"""
-Extract only durable user facts from this conversation.
-Ignore temporary requests.
-Return each fact as a separate line.
+    Extract only durable user facts from this conversation.
+    Ignore temporary requests.
+    Return each fact as a separate line.
 
-Conversation:
-{text}
-"""
+    Conversation:
+    {text}
+    """
 
     response = client.chat.completions.create(
         model="gpt-4.1-nano",
